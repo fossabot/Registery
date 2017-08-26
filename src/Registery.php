@@ -4,13 +4,23 @@ namespace DALTCORE\Registery;
 
 use DALTCORE\Registery\Exception\BadMethodCallException;
 use DALTCORE\Registery\Registery\Handler;
+use Illuminate\Support\Pluralizer;
 
-class Registery
+class Registery extends Handler
 {
+
+    protected $callableObjects = [
+        'find', 'fill', 'save', 'delete', 'get'
+    ];
+
     /**
-     * @var null
+     * Registery constructor.
      */
-    protected static $instance = null;
+    public function __construct()
+    {
+        parent::$instance = parent::__construct();
+        return $this;
+    }
 
     /**
      * @param $name
@@ -21,24 +31,51 @@ class Registery
      */
     public static function __callStatic($name, $arguments)
     {
-        if (Registery::instance() == null) {
-            Registery::$instance = new Handler();
+        // This wil boot the Handler
+        $class =  get_called_class();
+        $me = get_class(new $class); // Referrers to nothing
+
+        // Magic table handling
+        if(parent::$instance->table === null)
+        {
+            parent::$instance->setTable(Pluralizer::plural(parent::$instance->prefix . class_basename($class)));
+        } else {
+            parent::$instance->setTable(parent::$instance->table);
         }
 
-        if (!method_exists(Registery::instance(), $name)) {
-            throw new BadMethodCallException('Method \'' . $name . '\'does not exist in ' . get_class(Registery::instance()));
+        // Fetch data from database
+        parent::$instance->fetchData();
+
+        if($name == 'get')
+        {
+            $name = 'object';
         }
 
-        return call_user_func_array([Registery::instance(), $name], $arguments);
+        // Execute command to Handler class
+        if (!method_exists(parent::$instance, 'call'.camel_case($name))) {
+            throw new BadMethodCallException('Method \'' . 'call'.camel_case($name) . '\' does not exist in ' . class_basename($class));
+        }
+
+        // Return execution results
+        return call_user_func_array([parent::$instance, 'call'.camel_case($name)], $arguments);
     }
 
     /**
-     * Instance handler for the Registery
-     *
-     * @return null|Handler
+     * @param $name
+     * @param $arguments
+     * @return mixed
      */
-    protected static function instance()
+    public function __call($name, $arguments)
     {
-        return Registery::$instance;
+
+        $class =  get_called_class();
+
+        // Execute command to Handler class
+        if (!method_exists(parent::$instance, 'call'.camel_case($name))) {
+            throw new BadMethodCallException('Method \'' .  'call'.camel_case(ucfirst($name)) . '\' does not exist in ' . ($class));
+        }
+
+        return call_user_func_array([parent::$instance, 'call'.camel_case($name)], $arguments);
     }
+
 }

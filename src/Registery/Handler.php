@@ -2,29 +2,173 @@
 
 namespace DALTCORE\Registery\Registery;
 
+use DALTCORE\Registery\Exception\EngineNotFoundException;
+use DALTCORE\Registery\Registery;
+
 class Handler
 {
+
+    /**
+     * Instance
+     *
+     * @var Handler|null
+     */
+    protected static $instance = null;
+
+    /**
+     * Available DB engines
+     */
+    const JSDB = 'JsonEngine';
+    const MEMDB = 'MemoryEngine';
+    const NULL = 'NullEngine';
+
+    /**
+     * Table prefix
+     *
+     * @var string
+     */
+    protected $prefix = '';
+
+    /**
+     * Default DB engine
+     *
+     * @var string
+     */
+    protected $engine = Registery::JSDB;
+
+    /**
+     * @var null
+     */
+    protected $table = null;
+
     /**
      * Handler constructor.
      */
     public function __construct()
     {
+        // Check if we're already instantiated
+        if(self::$instance !== null)
+        {
+            return $this;
+        }
+
+        self::$instance = $this;
+
+        $this->engine = $this->startEngine();
+
         return $this;
     }
 
     /**
-     * @return array
+     * Couple selected engine to the engine parameter
+     *
+     * @return mixed
+     * @throws EngineNotFoundException
      */
-    public function find()
+    private function startEngine()
     {
-        return func_get_args();
+        $class = "\\DALTCORE\\Registery\\Engines\\" . $this->engine;
+
+        if(class_exists($class))
+        {
+            $engine = (new $class);
+            return $engine;
+        } else {
+            throw new EngineNotFoundException('Engine driver ' . $this->engine . ' is not found!');
+        }
     }
 
     /**
+     * Set table on self and engine
      *
+     * @param $table
+     * @return $this
      */
-    public function save()
+    protected function setTable($table)
     {
-        dd($this->path());
+        $this->table = $table;
+        $this->engine->table($table);
+
+        return $this;
+    }
+
+    /**
+     * Fetch data from driver
+     *
+     * @return $this
+     */
+    protected function fetchData()
+    {
+        $this->engine->fetch();
+        return $this;
+    }
+
+    /**
+     * Callable finder
+     *
+     * @return string
+     */
+    public function callFind()
+    {
+        return $this;
+    }
+
+    /**
+     * Handle input to object
+     *
+     * @param array $input
+     *
+     * @return object
+     */
+    public function callFill(array $input)
+    {
+        $this->engine->fill($input);
+        return $this;
+    }
+
+    /**
+     * Save the contents
+     */
+    public function callSave()
+    {
+        $this->engine->save();
+        return $this;
+    }
+
+    /**
+     * Get all contents in object
+     * @param null $name
+     * @return mixed
+     */
+    public function callGet($name = null)
+    {
+        return self::$instance->engine->get($name);
+    }
+
+    function callObject()
+    {
+        return self::$instance;
+    }
+
+    /**
+     * Get element from object
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->callGet($name);
+    }
+
+    /**
+     * Set element to object
+     *
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        $this->engine->set($name, $value);
     }
 }
