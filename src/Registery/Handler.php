@@ -145,9 +145,34 @@ class Handler
         return self::$instance->engine->get($name);
     }
 
-    function callObject()
+    /**
+     * Cet object
+     *
+     * @return Handler|null
+     */
+    public function callObject()
     {
         return self::$instance;
+    }
+
+    /**
+     * Object to json
+     *
+     * @return string
+     */
+    public function callToJson()
+    {
+        return json_encode($this->callGet());
+    }
+
+    /**
+     * Whole classed object to PHP Serialized object
+     *
+     * @return string
+     */
+    public function callToSerialize()
+    {
+        return serialize($this);
     }
 
     /**
