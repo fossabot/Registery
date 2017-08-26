@@ -3,6 +3,7 @@
 namespace DALTCORE\Registery\Engines;
 
 use DALTCORE\Registery\Contracts\BaseEngine;
+use DALTCORE\Registery\Exception\DataIntegrityException;
 use File;
 
 class JsonEngine implements BaseEngine {
@@ -90,6 +91,12 @@ class JsonEngine implements BaseEngine {
 
         $json = storage_path('Registery' . DIRECTORY_SEPARATOR . $this->table . '.json');
         $array = json_decode(file_get_contents($json), TRUE);
+
+        if(sha1(implode('-', $array['data'])) != $array['meta']['integrity'])
+        {
+            throw new DataIntegrityException('Data from registery ' . $this->table .' does not match last saved SHA');
+        }
+
         $this->fill($array['data']);
         $this->originalData = $array['data'];
 

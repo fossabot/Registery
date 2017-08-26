@@ -18,9 +18,9 @@ class Handler
     /**
      * Available DB engines
      */
-    const JSDB = 'JsonEngine';
-    const MEMDB = 'MemoryEngine';
-    const NULL = 'NullEngine';
+    const JSONDB = '\\DALTCORE\\Registery\\Engines\\JsonEngine';
+    const MEMORYDB = '\\DALTCORE\\Registery\\Engines\\MemoryEngine';
+    const NULLDB = '\\DALTCORE\\Registery\\Engines\\NullEngine';
 
     /**
      * Table prefix
@@ -34,7 +34,7 @@ class Handler
      *
      * @var string
      */
-    protected $engine = Registery::JSDB;
+    protected $engine = Registery::JSONDB;
 
     /**
      * @var null
@@ -67,7 +67,7 @@ class Handler
      */
     private function startEngine()
     {
-        $class = "\\DALTCORE\\Registery\\Engines\\" . $this->engine;
+        $class = $this->engine;
 
         if(class_exists($class))
         {

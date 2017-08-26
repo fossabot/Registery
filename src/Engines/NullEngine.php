@@ -16,6 +16,7 @@ class NullEngine implements BaseEngine {
      */
     public function fill($array)
     {
+        unset($array);
         return $this;
     }
 
@@ -25,6 +26,7 @@ class NullEngine implements BaseEngine {
      */
     public function get($key = null)
     {
+        unset($key);
         return null;
     }
 
@@ -34,7 +36,7 @@ class NullEngine implements BaseEngine {
      */
     public function set($name, $value)
     {
-        //
+        unset($name, $value);
     }
 
     /**
@@ -42,7 +44,7 @@ class NullEngine implements BaseEngine {
      */
     public function save()
     {
-        //
+        unset($this->data);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace DALTCORE\Registery;
 
 use DALTCORE\Registery\Exception\BadMethodCallException;
+use DALTCORE\Registery\Exception\DataIntegrityException;
 use DALTCORE\Registery\Registery\Handler;
 use Illuminate\Support\Pluralizer;
 
@@ -44,8 +45,16 @@ class Registery extends Handler
         }
 
         // Fetch data from database
-        parent::$instance->fetchData();
+        try {
+            parent::$instance->fetchData();
+        } catch (\Exception $e) {
+            if($e instanceof DataIntegrityException)
+            {
+                throw new DataIntegrityException($e->getMessage());
+            }
+        }
 
+        // The static way for "get" gets interpreted as object
         if($name == 'get')
         {
             $name = 'object';
