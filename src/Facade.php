@@ -1,6 +1,6 @@
 <?php
 
-namespace DALTCORE\Tarpit;
+namespace DALTCORE\Registery;
 
 /**
  * Class Facade
