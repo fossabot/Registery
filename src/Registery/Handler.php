@@ -87,6 +87,12 @@ class Handler
     protected function setTable($table)
     {
         $this->table = $table;
+
+        if(is_string($this->engine))
+        {
+            $this->engine = $this->startEngine();
+        }
+
         $this->engine->table($table);
 
         return $this;
