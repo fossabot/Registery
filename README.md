@@ -93,9 +93,9 @@ If you discover any security related issues, please contact [Ramon Smit](https:/
 
 The MIT License (MIT). Please see [License File](License.md) for more information.
 
-[ico-version]: https://img.shields.io/github/release/daltcore/tarpit.svg?style=flat-square
+[ico-version]: https://img.shields.io/github/release/daltcore/registery.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/daltcore/tarpit.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/daltcore/registery.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/daltcore/tarpit
-[link-downloads]: https://packagist.org/packages/daltcore/tarpit
+[link-packagist]: https://packagist.org/packages/daltcore/registery
+[link-downloads]: https://packagist.org/packages/daltcore/registery
