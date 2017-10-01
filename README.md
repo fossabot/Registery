@@ -1,63 +1,89 @@
-# HTTP-Tarpit
+# Registery
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](License.md)
 [![Total Downloads][ico-downloads]][link-downloads]
 
 
-HTTP-Tarpit blocklist package for Laravel
+Registery Database for Laravel
 
 ## Install
 
 Via Composer
 
 ``` bash
-$ composer require daltcore/tarpit
+$ composer require daltcore/registery
 ```
-
-## Usage
 
 In your `config/app.php` at Service Providers
 ``` php
-DALTCORE\Tarpit\TarpitServiceProvider::class,
+DALTCORE\Registery\RegisteryServiceProvider::class,
 ```
 
 In your `config/app.php` at Aliasses
 ``` php
-'Tarpit' => DALTCORE\Tarpit\Facade::class,
+'Registery' => DALTCORE\Registery\Facade::class,
 ```
 
-In your `app/Exceptions/Handler.php` under function render() just before `return parent::render($request, $exception);`
-``` php
-/**
- * Tarpit Exception Helper
- */
-\DALTCORE\Tarpit\Services\ExceptionHelper::handleTarpitCommunication($request, $exception);
+## Usage
+> This is just an example!
+
+Create a directory in `app` called `Registeries`
+
+Create a file called `Config.php` with the following contents:
+```php
+<?php
+
+namespace App\Registeries;
+
+use DALTCORE\Registery\Registery;
+
+class Config extends Registery {
+    
+    /**
+    * These properties are optional!
+    */
+    protected $engine = Registery::JSONDB; // Registery::MEMORYDB Registery::NULLDB
+    protected $prefix = ''; // Prefix for the "keys"
+    protected $table = 'configs'; // Table name
+}
 ```
 
-In your `.env` file you have to add the following parameters
-```text
-# To enable the tarpit
-TARPIT_ENABLE=false
+Now you can access the registery trough the `Config` class like:
 
-# Your website domain
-TARPIT_DOMAIN=basis-cms.vm
-
-# Tarpit API Key
-TARPIT_API_KEY=af4ae3fe3ff09dbba45a601619ca783455cfeb4d
-
-# Tarpit endpoint
-TARPIT_ENDPOINT=api.http-tarpit.org
-
-# Tarpit API Version
-TARPIT_VERSION=v2
-
-# Direct sync or with cache (30 minutes)
-TARPIT_HANDLER=realtime
-
+```php
+$config = Config::get();
+dump($config);
 ```
 
+You can update via:
+```php
+$config->fill(['foo' => 'bar']);
+dump($config);
+$config->save();
+```
+
+or
+
+```php
+$config->foo = 'baz';
+dump($config);
+$config->save();
+```
+
+You can get the values like this:
+```php
+dump($config->foo); // baz
+```
+
+or
+
+You can get the values like this:
+```php
+dump($config->get()); // array
+```
 If you discover any security related issues, please contact [Ramon Smit](https://github.com/ramonsmit).
+
 
 ## Credits
 
