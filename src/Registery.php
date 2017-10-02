@@ -11,7 +11,7 @@ class Registery extends Handler
 {
 
     protected $callableObjects = [
-        'find', 'fill', 'save', 'delete', 'get'
+        'find', 'fill', 'save', 'delete', 'get', 'update'
     ];
 
     /**
@@ -20,6 +20,7 @@ class Registery extends Handler
     public function __construct()
     {
         parent::$instance = parent::__construct();
+
         return $this;
     }
 
@@ -33,12 +34,11 @@ class Registery extends Handler
     public static function __callStatic($name, $arguments)
     {
         // This wil boot the Handler
-        $class =  get_called_class();
+        $class = get_called_class();
         $me = get_class(new $class); // Referrers to nothing
 
         // Magic table handling
-        if(parent::$instance->table === null)
-        {
+        if (parent::$instance->table === null) {
             parent::$instance->setTable(Pluralizer::plural(parent::$instance->prefix . class_basename($class)));
         } else {
             parent::$instance->setTable(parent::$instance->table);
@@ -48,43 +48,42 @@ class Registery extends Handler
         try {
             parent::$instance->fetchData();
         } catch (\Exception $e) {
-            if($e instanceof DataIntegrityException)
-            {
+            if ($e instanceof DataIntegrityException) {
                 throw new DataIntegrityException($e->getMessage());
             }
         }
 
         // The static way for "get" gets interpreted as object
-        if($name == 'get')
-        {
+        if ($name == 'get') {
             $name = 'object';
         }
 
         // Execute command to Handler class
-        if (!method_exists(parent::$instance, 'call'.camel_case($name))) {
-            throw new BadMethodCallException('Method \'' . 'call'.camel_case($name) . '\' does not exist in ' . class_basename($class));
+        if (!method_exists(parent::$instance, 'call' . camel_case($name))) {
+            throw new BadMethodCallException('Method \'' . 'call' . camel_case($name) . '\' does not exist in ' . class_basename($class));
         }
 
         // Return execution results
-        return call_user_func_array([parent::$instance, 'call'.camel_case($name)], $arguments);
+        return call_user_func_array([parent::$instance, 'call' . camel_case($name)], $arguments);
     }
 
     /**
      * @param $name
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($name, $arguments)
     {
 
-        $class =  get_called_class();
+        $class = get_called_class();
 
         // Execute command to Handler class
-        if (!method_exists(parent::$instance, 'call'.camel_case($name))) {
-            throw new BadMethodCallException('Method \'' .  'call'.camel_case(ucfirst($name)) . '\' does not exist in ' . ($class));
+        if (!method_exists(parent::$instance, 'call' . camel_case($name))) {
+            throw new BadMethodCallException('Method \'' . 'call' . camel_case(ucfirst($name)) . '\' does not exist in ' . ($class));
         }
 
-        return call_user_func_array([parent::$instance, 'call'.camel_case($name)], $arguments);
+        return call_user_func_array([parent::$instance, 'call' . camel_case($name)], $arguments);
     }
 
 }
