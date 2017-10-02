@@ -6,7 +6,8 @@ use DALTCORE\Registery\Contracts\BaseEngine;
 use DALTCORE\Registery\Exception\DataIntegrityException;
 use File;
 
-class JsonEngine implements BaseEngine {
+class JsonEngine implements BaseEngine
+{
 
     protected $table = null;
 
@@ -16,28 +17,42 @@ class JsonEngine implements BaseEngine {
 
     /**
      * @param $array
+     *
      * @return $this
      */
     public function fill($array)
     {
         $this->data = $array;
+
+        return $this;
+    }
+
+    /**
+     * @param $array
+     *
+     * @return $this
+     */
+    public function update($array)
+    {
+        $this->fill($array);
+        $this->save();
+
         return $this;
     }
 
     /**
      * @param null $key
+     *
      * @return \Illuminate\Support\Collection|mixed|null
      */
     public function get($key = null)
     {
 
-        if($key === null)
-        {
+        if ($key === null) {
             return $this->data;
         }
 
-        if(isset($this->data[$key]))
-        {
+        if (isset($this->data[$key])) {
             return $this->data[$key];
         }
 
@@ -60,8 +75,8 @@ class JsonEngine implements BaseEngine {
     {
         $header = [
             'integrity' => sha1(implode('-', $this->data)),
-            'elements' => count($this->data),
-            'lock' => false,
+            'elements'  => count($this->data),
+            'lock'      => false,
         ];
 
 
@@ -90,11 +105,10 @@ class JsonEngine implements BaseEngine {
         }
 
         $json = storage_path('Registery' . DIRECTORY_SEPARATOR . $this->table . '.json');
-        $array = json_decode(file_get_contents($json), TRUE);
+        $array = json_decode(file_get_contents($json), true);
 
-        if(sha1(implode('-', $array['data'])) != $array['meta']['integrity'])
-        {
-            throw new DataIntegrityException('Data from registery ' . $this->table .' does not match last saved SHA');
+        if (sha1(implode('-', $array['data'])) != $array['meta']['integrity']) {
+            throw new DataIntegrityException('Data from registery ' . $this->table . ' does not match last saved SHA');
         }
 
         $this->fill($array['data']);
@@ -107,10 +121,11 @@ class JsonEngine implements BaseEngine {
      * Add table for this object
      *
      * @param $table
+     *
      * @return $this
      */
     public function table($table)
     {
-       $this->table = $table;
+        $this->table = $table;
     }
 }

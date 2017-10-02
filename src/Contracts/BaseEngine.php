@@ -2,18 +2,32 @@
 
 namespace DALTCORE\Registery\Contracts;
 
-interface BaseEngine {
+interface BaseEngine
+{
 
     /**
      * Fill selected table with these data
+     *
      * @param $array
+     *
      * @return mixed
      */
     public function fill($array);
 
     /**
+     * Fill and save
+     *
+     * @param $array
+     *
+     * @return mixed
+     */
+    public function update($array);
+
+    /**
      * Selecte database from model contents or default model name pluralized
+     *
      * @param $table
+     *
      * @return mixed
      */
     public function table($table);
@@ -42,6 +56,7 @@ interface BaseEngine {
      *
      * @param $name
      * @param $value
+     *
      * @return mixed
      */
     public function set($name, $value);

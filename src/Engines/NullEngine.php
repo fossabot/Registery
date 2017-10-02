@@ -4,7 +4,8 @@ namespace DALTCORE\Registery\Engines;
 
 use DALTCORE\Registery\Contracts\BaseEngine;
 
-class NullEngine implements BaseEngine {
+class NullEngine implements BaseEngine
+{
 
     protected $table = null;
 
@@ -12,21 +13,32 @@ class NullEngine implements BaseEngine {
 
     /**
      * @param $array
+     *
      * @return $this
      */
     public function fill($array)
     {
         unset($array);
+
+        return $this;
+    }
+
+    public function update($array)
+    {
+        $this->fill($array);
+
         return $this;
     }
 
     /**
      * @param null $key
+     *
      * @return \Illuminate\Support\Collection|mixed|null
      */
     public function get($key = null)
     {
         unset($key);
+
         return null;
     }
 
@@ -59,6 +71,7 @@ class NullEngine implements BaseEngine {
      * Add table for this object
      *
      * @param $table
+     *
      * @return $this
      */
     public function table($table)
