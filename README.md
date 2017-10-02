@@ -56,7 +56,7 @@ $config = Config::get();
 dump($config);
 ```
 
-You can update via:
+You can fill via:
 ```php
 $config->fill(['foo' => 'bar']);
 dump($config);
@@ -69,6 +69,13 @@ or
 $config->foo = 'baz';
 dump($config);
 $config->save();
+```
+
+or
+
+```php
+$config->update(['foo' => 'bar']);
+dump($config);
 ```
 
 You can get the values like this:
