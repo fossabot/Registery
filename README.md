@@ -3,6 +3,7 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](License.md)
 [![Total Downloads][ico-downloads]][link-downloads]
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDALTCORE%2FRegistery.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FDALTCORE%2FRegistery?ref=badge_shield)
 
 
 Registery Database for Laravel
@@ -106,3 +107,6 @@ The MIT License (MIT). Please see [License File](License.md) for more informatio
 
 [link-packagist]: https://packagist.org/packages/daltcore/registery
 [link-downloads]: https://packagist.org/packages/daltcore/registery
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDALTCORE%2FRegistery.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FDALTCORE%2FRegistery?ref=badge_large)
